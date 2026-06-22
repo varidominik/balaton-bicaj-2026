@@ -74,9 +74,10 @@
     .al-book{background:#003580;color:#fff;border-color:#003580}
     .al-map{background:var(--surf);color:var(--text)}
 
-    /* ── MAIN GRID ── */
-    .main-grid{display:grid;grid-template-columns:1fr 320px;gap:1.1rem;padding-bottom:3rem;align-items:start}
-    @media(max-width:780px){.main-grid{grid-template-columns:1fr}}
+    /* ── REST GRID ── */
+    .rest-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem;padding-bottom:3rem;margin-top:1rem}
+    @media(max-width:780px){.rest-grid{grid-template-columns:1fr}}
+    .rest-card{margin-bottom:0}
 
     /* ── CARD ── */
     .card{background:var(--surf);border-radius:var(--r);border:1px solid var(--bdr);overflow:hidden;box-shadow:var(--sh)}
@@ -251,11 +252,8 @@
 
   </div><!-- /acc-strip -->
 
-  <!-- MAIN GRID: day info LEFT + restaurants RIGHT -->
-  <div class="main-grid">
-
-    <!-- LEFT: overview or day detail -->
-    <div>
+  <!-- DAY CONTENT: full width -->
+  <div style="margin-bottom:1rem">
 
       <!-- OVERVIEW (day 0) -->
       <div id="ov" class="card">
@@ -406,10 +404,10 @@
         </div>
       </div>
 
-    </div><!-- /LEFT -->
+  </div><!-- /day content -->
 
-    <!-- RIGHT: restaurants -->
-    <div>
+  <!-- RESTAURANT GRID: 3 columns -->
+  <div class="rest-grid">
 
       <div class="rest-card">
         <div class="rest-acc-head"><i class="ti ti-tools-kitchen-2"></i>Éttermek · Balatonkeresztúr</div>
@@ -503,9 +501,7 @@
         </div>
       </div>
 
-    </div><!-- /RIGHT -->
-
-  </div><!-- /main-grid -->
+  </div><!-- /rest-grid -->
 </div><!-- /wrap -->
 
 <footer>
