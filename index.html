@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Balaton Körbetekerés 2026</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
@@ -214,22 +213,18 @@
 
 <div class="wrap">
 
-  <!-- MAP -->
+  <!-- GOOGLE MAPS -->
   <div class="map-box">
-    <!-- Overview: Leaflet with colored stage routes (day 0) -->
-    <div id="lmap" style="width:100%;height:460px"></div>
-    <!-- Individual days: Google Maps iframe (days 1-5) -->
-    <div id="gmap-wrap" style="display:none;position:relative">
-      <div class="map-loading" id="gmap-loading">Térkép betöltése…</div>
-      <iframe id="gmap" style="width:100%;height:460px;border:none;display:block"
-        allowfullscreen loading="lazy"
-        onload="document.getElementById('gmap-loading').style.display='none'">
-      </iframe>
-    </div>
+    <div class="map-loading" id="gmap-loading">Térkép betöltése…</div>
+    <iframe id="gmap"
+      src="https://maps.google.com/maps?f=d&saddr=Siofok,Hungary&daddr=Balatonkeresztur,Hungary+to:Badacsonytomaj,Hungary+to:Balatonfuzfo,Hungary+to:Siofok,Hungary&dirflg=b&output=embed&hl=hu"
+      style="width:100%;height:460px;border:none;display:block"
+      allowfullscreen loading="lazy"
+      onload="document.getElementById('gmap-loading').style.display='none'">
+    </iframe>
   </div>
   <div class="map-footer">
-    <div class="map-note" id="map-note-ov"><i class="ti ti-bike" style="font-size:15px"></i>CyclOSM · etaponként színezett útvonal</div>
-    <div class="map-note" id="map-note-gm" style="display:none"><i class="ti ti-bike" style="font-size:15px"></i>Google Maps · kerékpáros útvonal</div>
+    <div class="map-note"><i class="ti ti-bike" style="font-size:15px"></i>Google Maps · kerékpáros útvonal</div>
     <a id="gmap-ext" class="gmap-btn" href="https://www.google.com/maps/dir/?api=1&origin=Siofok,Hungary&destination=Siofok,Hungary&waypoints=Balatonkeresztur,Hungary|Badacsonytomaj,Hungary|Balatonfuzfo,Hungary&travelmode=bicycling" target="_blank">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
       Megnyitás Google Mapsben (kerékpáros)
@@ -785,19 +780,8 @@ function setDay(day) {
   document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('on', i === day));
   document.getElementById('ov').style.display = day === 0 ? 'block' : 'none';
   for (let i=1;i<=5;i++) document.getElementById('d'+i).classList.toggle('on', day === i);
-
-  const isOv = day === 0;
-  document.getElementById('lmap').style.display = isOv ? 'block' : 'none';
-  document.getElementById('gmap-wrap').style.display = isOv ? 'none' : 'block';
-  document.getElementById('map-note-ov').style.display = isOv ? 'flex' : 'none';
-  document.getElementById('map-note-gm').style.display = isOv ? 'none' : 'flex';
-
-  if (isOv) {
-    setTimeout(() => lmap && lmap.invalidateSize(), 50);
-  } else {
-    document.getElementById('gmap-loading').style.display = 'flex';
-    document.getElementById('gmap').src = gmapSrcs[day];
-  }
+  document.getElementById('gmap-loading').style.display = 'flex';
+  document.getElementById('gmap').src = gmapSrcs[day];
   document.getElementById('gmap-ext').href = gmapExtUrls[day];
 }
 
@@ -838,75 +822,6 @@ async function loadPhoto(imgId, phId, url) {
     }
   } catch(_) {}
 }
-/* ── LEAFLET OVERVIEW MAP ── */
-const LSCRIPT = document.createElement('script');
-LSCRIPT.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-LSCRIPT.onload = initLeaflet;
-document.head.appendChild(LSCRIPT);
-
-let lmap = null;
-
-function initLeaflet() {
-  lmap = L.map('lmap', { center:[46.86,17.72], zoom:10, scrollWheelZoom:false });
-  L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
-    attribution:'<a href="https://www.cyclosm.org">CyclOSM</a> | &copy; OpenStreetMap',
-    maxZoom:19, subdomains:'abc',
-  }).addTo(lmap);
-
-  const stages = [
-    { color:'#2d6a4f', label:'1. etap · Siófok → Keresztúr',
-      wps:[[46.9079,18.0489],[46.8741,17.9234],[46.8128,17.7652],[46.7694,17.6282],[46.7508,17.5556],[46.7133,17.3720]] },
-    { color:'#1a7a5e', label:'2. etap · Keresztúr → Badacsony',
-      wps:[[46.7133,17.3720],[46.7060,17.2640],[46.7697,17.2423],[46.7991,17.3517],[46.8096,17.4780]] },
-    { color:'#1971c2', label:'4. etap · Badacsony → Balatonfűzfő',
-      wps:[[46.8096,17.4780],[46.8344,17.6298],[46.8825,17.7988],[46.9151,17.8892],[46.9353,17.9023],[46.9821,17.9892],[47.0215,18.1254]] },
-    { color:'#e67700', label:'5. etap · Balatonfűzfő → Siófok',
-      wps:[[47.0215,18.1254],[47.0537,18.1133],[46.9790,18.1350],[46.9079,18.0489]] },
-  ];
-
-  async function fetchOsrm(wps) {
-    const coords = wps.map(([la,ln])=>`${ln},${la}`).join(';');
-    try {
-      const r = await fetch(`https://router.project-osrm.org/route/v1/bike/${coords}?overview=full&geometries=geojson`);
-      const d = await r.json();
-      if (d.code==='Ok') return d.routes[0].geometry.coordinates.map(([ln,la])=>[la,ln]);
-    } catch(_) {}
-    return wps;
-  }
-
-  stages.forEach(async s => {
-    const pts = await fetchOsrm(s.wps);
-    L.polyline(pts, { color:s.color, weight:5, opacity:.88, lineJoin:'round' })
-      .addTo(lmap).bindPopup(`<strong>${s.label}</strong>`);
-  });
-
-  // Accommodation markers
-  [
-    { lat:46.7133, lng:17.3720, name:'Fazekas Vendégház', night:'1. éjszaka · júl. 15→16.' },
-    { lat:46.8096, lng:17.4780, name:'Casa Canem ★9.7', night:'2–3. éjszaka · júl. 16→18.' },
-    { lat:47.0215, lng:18.1254, name:'Ravenswood Cottage', night:'4. éjszaka · júl. 18→19.' },
-  ].forEach(m => {
-    const ic = L.divIcon({ className:'',
-      html:`<div style="width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid #1b5e20;box-shadow:0 2px 6px rgba(0,0,0,.35)"></div>`,
-      iconAnchor:[7,7] });
-    L.marker([m.lat,m.lng],{icon:ic}).addTo(lmap)
-      .bindPopup(`<strong>🛏 ${m.name}</strong><br><span style="font-size:12px">${m.night}</span>`);
-  });
-
-  // Stage legend
-  const legend = L.control({ position:'bottomleft' });
-  legend.onAdd = () => {
-    const d = L.DomUtil.create('div');
-    d.style.cssText = 'background:white;padding:8px 12px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.15);font-size:12px;line-height:1.8;font-family:system-ui';
-    d.innerHTML = [
-      ['#2d6a4f','1. etap ~80 km'],['#1a7a5e','2. etap ~50 km'],
-      ['#1971c2','4. etap ~75 km'],['#e67700','5. etap ~25 km'],
-    ].map(([c,l])=>`<div><span style="display:inline-block;width:20px;height:4px;background:${c};border-radius:2px;vertical-align:middle;margin-right:6px"></span>${l}</div>`).join('');
-    return d;
-  };
-  legend.addTo(lmap);
-}
-
 loadPhoto('aph1','aph1-ph','https://www.booking.com/hotel/hu/fazekas-vendeghaz-balatonkeresztur.hu.html');
 loadPhoto('aph2','aph2-ph','https://www.booking.com/hotel/hu/casa-canem.hu.html');
 loadPhoto('aph3','aph3-ph','https://www.booking.com/hotel/hu/ravenswood-cottage.hu.html');
