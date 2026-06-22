@@ -737,46 +737,18 @@
   </div>
 
   <!-- WEATHER SECTION -->
-  <div class="section-title"><i class="ti ti-cloud-sun"></i>Várható időjárás júliusban · Balatoni átlagok</div>
-  <div class="weather-grid">
-
-    <div class="wcard">
-      <div class="wcard-loc">☀️ Balatonkeresztúr</div>
-      <div class="wcard-date">Júl. 15–16. · 1–2. nap</div>
-      <div class="wrow"><span class="wico">🌡</span><span>Nappal ~28–32°C · Éjjel ~18–20°C</span></div>
-      <div class="wrow"><span class="wico">☀️</span><span>10–11 napsütéses óra naponta</span></div>
-      <div class="wrow"><span class="wico">💧</span><span>Tóvíz ~25°C</span></div>
-      <div class="wrow"><span class="wico">🌬</span><span>ÉNy-i szél · 10–20 km/h</span></div>
-      <div class="wrow"><span class="wico">⛈</span><span>~15% délutáni záporvalószínűség</span></div>
-      <a class="wforecast-btn" href="https://wttr.in/Balatonkeresztur" target="_blank"><i class="ti ti-external-link" style="font-size:11px"></i>Aktuális előrejelzés</a>
-      <div class="wavg">Júliusi Balaton-átlagok alapján</div>
+  <div class="section-title"><i class="ti ti-cloud-sun"></i>Várható időjárás · Júl. 15–19. · Balatoni átlagok</div>
+  <div class="card" style="margin-bottom:3rem;overflow:hidden">
+    <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+      <svg id="weather-svg" viewBox="0 0 600 245" style="display:block;min-width:480px;width:100%"></svg>
     </div>
-
-    <div class="wcard">
-      <div class="wcard-loc">☀️ Badacsonytomaj</div>
-      <div class="wcard-date">Júl. 16–18. · 2–3. nap</div>
-      <div class="wrow"><span class="wico">🌡</span><span>Nappal ~27–31°C · Éjjel ~17–19°C</span></div>
-      <div class="wrow"><span class="wico">⛰</span><span>Hegyi szél · kissé hűvösebb esti hegyoldalon</span></div>
-      <div class="wrow"><span class="wico">💧</span><span>Tóvíz ~25°C</span></div>
-      <div class="wrow"><span class="wico">⛈</span><span>~20% zivatarvalószínűség (hegyi hatás)</span></div>
-      <div class="wrow"><span class="wico">🍷</span><span>Szőlőhegyen este hűvös – hozz rétegeket</span></div>
-      <a class="wforecast-btn" href="https://wttr.in/Badacsonytomaj" target="_blank"><i class="ti ti-external-link" style="font-size:11px"></i>Aktuális előrejelzés</a>
-      <div class="wavg">Júliusi Balaton-átlagok alapján</div>
+    <div style="display:flex;gap:.5rem;padding:.7rem 1rem 1rem;flex-wrap:wrap;border-top:1px solid var(--bdr);background:var(--bg)">
+      <span style="font-size:11px;color:var(--muted);align-self:center">Júliusi átlagok · élő előrejelzés:</span>
+      <a class="wforecast-btn" href="https://wttr.in/Balatonkeresztur" target="_blank">Keresztúr</a>
+      <a class="wforecast-btn" href="https://wttr.in/Badacsonytomaj" target="_blank">Badacsony</a>
+      <a class="wforecast-btn" href="https://wttr.in/Balatonfuzfo" target="_blank">Balatonfűzfő</a>
     </div>
-
-    <div class="wcard">
-      <div class="wcard-loc">☀️ Balatonfűzfő</div>
-      <div class="wcard-date">Júl. 18–19. · 4–5. nap</div>
-      <div class="wrow"><span class="wico">🌡</span><span>Nappal ~28–32°C · Éjjel ~18–21°C</span></div>
-      <div class="wrow"><span class="wico">🌬</span><span>Keleti part · általában szélcsendesebb</span></div>
-      <div class="wrow"><span class="wico">💧</span><span>Tóvíz ~25°C · homokos part</span></div>
-      <div class="wrow"><span class="wico">☀️</span><span>10–11 napsütéses óra naponta</span></div>
-      <div class="wrow"><span class="wico">⛈</span><span>~12% csapadékvalószínűség</span></div>
-      <a class="wforecast-btn" href="https://wttr.in/Balatonfuzfo" target="_blank"><i class="ti ti-external-link" style="font-size:11px"></i>Aktuális előrejelzés</a>
-      <div class="wavg">Júliusi Balaton-átlagok alapján</div>
-    </div>
-
-  </div><!-- /weather-grid -->
+  </div>
 
 </div><!-- /wrap -->
 
@@ -853,6 +825,105 @@ async function loadPhoto(imgId, phId, url) {
 loadPhoto('aph1','aph1-ph','https://www.booking.com/hotel/hu/fazekas-vendeghaz-balatonkeresztur.hu.html');
 loadPhoto('aph2','aph2-ph','https://www.booking.com/hotel/hu/casa-canem.hu.html');
 loadPhoto('aph3','aph3-ph','https://www.booking.com/hotel/hu/ravenswood-cottage.hu.html');
+
+/* ── WEATHER CHART ── */
+function drawWeatherChart() {
+  const svg = document.getElementById('weather-svg');
+  if (!svg) return;
+
+  const days = [
+    { label:'Júl. 15', sub:'Szerda',    icon:'☀️', loc:'1. nap', tmax:31, tmin:19, rain:15, water:25 },
+    { label:'Júl. 16', sub:'Csütörtök', icon:'⛅', loc:'2. nap', tmax:30, tmin:18, rain:15, water:25 },
+    { label:'Júl. 17', sub:'Péntek',    icon:'⛅', loc:'3. nap · pihenő', tmax:29, tmin:17, rain:20, water:25 },
+    { label:'Júl. 18', sub:'Szombat',   icon:'☀️', loc:'4. nap', tmax:31, tmin:19, rain:12, water:25 },
+    { label:'Júl. 19', sub:'Vasárnap',  icon:'☀️', loc:'5. nap', tmax:32, tmin:20, rain:10, water:25 },
+  ];
+
+  const W=600, H=245;
+  const PL=44, PR=14, PT=54, PB=78;
+  const CW=W-PL-PR, CH=H-PT-PB;
+  const TMIN=12, TMAX=36, TSPAN=TMAX-TMIN;
+  const n=days.length, colW=CW/n;
+
+  const cx = i => PL + colW*i + colW/2;
+  const cy = t => PT + CH - (t-TMIN)/TSPAN*CH;
+
+  let h = `<defs>
+    <linearGradient id="wband" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ff7043" stop-opacity=".35"/>
+      <stop offset="100%" stop-color="#29b6f6" stop-opacity=".25"/>
+    </linearGradient>
+    <linearGradient id="wbg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f9fafb"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+  </defs>`;
+
+  /* background */
+  h += `<rect width="${W}" height="${H}" fill="url(#wbg)" rx="12"/>`;
+
+  /* grid lines + y-axis labels */
+  [15,20,25,30,35].forEach(t => {
+    const y = cy(t);
+    h += `<line x1="${PL}" y1="${y.toFixed(1)}" x2="${W-PR}" y2="${y.toFixed(1)}" stroke="#eeeeee" stroke-width="1"/>`;
+    h += `<text x="${PL-6}" y="${(y+4).toFixed(1)}" text-anchor="end" font-size="10" fill="#bdbdbd" font-family="system-ui">${t}°</text>`;
+  });
+
+  /* column separators */
+  for (let i=1;i<n;i++) {
+    const x = PL + colW*i;
+    h += `<line x1="${x.toFixed(1)}" y1="${PT}" x2="${x.toFixed(1)}" y2="${PT+CH}" stroke="#f0f0f0" stroke-width="1"/>`;
+  }
+
+  /* temperature band fill */
+  const maxPts = days.map((_,i)=>`${cx(i).toFixed(1)},${cy(days[i].tmax).toFixed(1)}`).join(' ');
+  const minPts = [...days].map((_,i)=>`${cx(n-1-i).toFixed(1)},${cy(days[n-1-i].tmin).toFixed(1)}`).join(' ');
+  h += `<polygon points="${maxPts} ${minPts}" fill="url(#wband)"/>`;
+
+  /* smooth max line */
+  const maxLine = days.map((d,i)=>`${i===0?'M':'L'}${cx(i).toFixed(1)},${cy(d.tmax).toFixed(1)}`).join('');
+  h += `<path d="${maxLine}" fill="none" stroke="#ff7043" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+
+  /* smooth min line */
+  const minLine = days.map((d,i)=>`${i===0?'M':'L'}${cx(i).toFixed(1)},${cy(d.tmin).toFixed(1)}`).join('');
+  h += `<path d="${minLine}" fill="none" stroke="#29b6f6" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+
+  days.forEach((d,i) => {
+    const x = cx(i), ymx = cy(d.tmax), ymn = cy(d.tmin);
+
+    /* weather icon */
+    h += `<text x="${x.toFixed(1)}" y="${(PT-20).toFixed(1)}" text-anchor="middle" font-size="24" font-family="system-ui">${d.icon}</text>`;
+
+    /* max dot + label */
+    h += `<circle cx="${x.toFixed(1)}" cy="${ymx.toFixed(1)}" r="5" fill="#ff7043" stroke="white" stroke-width="2"/>`;
+    h += `<text x="${x.toFixed(1)}" y="${(ymx-10).toFixed(1)}" text-anchor="middle" font-size="12" font-weight="700" fill="#e64a19" font-family="system-ui">${d.tmax}°C</text>`;
+
+    /* min dot + label */
+    h += `<circle cx="${x.toFixed(1)}" cy="${ymn.toFixed(1)}" r="5" fill="#29b6f6" stroke="white" stroke-width="2"/>`;
+    h += `<text x="${x.toFixed(1)}" y="${(ymn+18).toFixed(1)}" text-anchor="middle" font-size="12" font-weight="700" fill="#0288d1" font-family="system-ui">${d.tmin}°C</text>`;
+
+    /* day label */
+    const ly = PT+CH+16;
+    h += `<text x="${x.toFixed(1)}" y="${ly}" text-anchor="middle" font-size="12" font-weight="600" fill="#424242" font-family="system-ui">${d.label}</text>`;
+    h += `<text x="${x.toFixed(1)}" y="${ly+14}" text-anchor="middle" font-size="10" fill="#9e9e9e" font-family="system-ui">${d.sub}</text>`;
+
+    /* rain bar */
+    const bw=32, bh_max=24, bh=Math.max(3, d.rain/100*bh_max);
+    const bx=x-bw/2, by=PT+CH+36;
+    h += `<rect x="${bx.toFixed(1)}" y="${by}" width="${bw}" height="${bh_max}" rx="4" fill="#e3f2fd"/>`;
+    h += `<rect x="${bx.toFixed(1)}" y="${(by+bh_max-bh).toFixed(1)}" width="${bw}" height="${bh.toFixed(1)}" rx="4" fill="#42a5f5" opacity=".8"/>`;
+    h += `<text x="${x.toFixed(1)}" y="${by+bh_max+12}" text-anchor="middle" font-size="10" fill="#1565c0" font-weight="600" font-family="system-ui">${d.rain}%</text>`;
+  });
+
+  /* legend */
+  const ly = 18;
+  h += `<circle cx="52" cy="${ly}" r="5" fill="#ff7043"/><text x="61" y="${ly+4}" font-size="10" fill="#757575" font-family="system-ui">Max hőm.</text>`;
+  h += `<circle cx="130" cy="${ly}" r="5" fill="#29b6f6"/><text x="139" y="${ly+4}" font-size="10" fill="#757575" font-family="system-ui">Min hőm.</text>`;
+  h += `<rect x="208" y="${ly-6}" width="10" height="10" rx="2" fill="#42a5f5" opacity=".8"/><text x="222" y="${ly+4}" font-size="10" fill="#757575" font-family="system-ui">Csapadékvalószínűség</text>`;
+
+  svg.innerHTML = h;
+}
+drawWeatherChart();
 </script>
 </body>
 </html>
