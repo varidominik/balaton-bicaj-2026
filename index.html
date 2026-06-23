@@ -35,8 +35,18 @@
     .stat-cell .n{font-size:1.2rem;font-weight:700;line-height:1.1}
     .stat-cell .l{font-size:10px;opacity:.7;text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
 
+    /* ── NAVBAR ── */
+    .navbar{background:var(--green);position:sticky;top:0;z-index:1000;box-shadow:0 2px 12px rgba(0,0,0,.25)}
+    .nb-inner{max-width:1160px;margin:0 auto;padding:0 1.25rem;height:52px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+    .nb-brand{display:flex;align-items:center;gap:8px;color:#fff;text-decoration:none;font-weight:700;font-size:.95rem;letter-spacing:-.2px;flex-shrink:0}
+    .nb-brand .nbi{font-size:1.2rem}
+    .nb-links{display:flex;align-items:center;gap:.15rem}
+    .nb-link{color:rgba(255,255,255,.75);text-decoration:none;font-size:13px;font-weight:500;padding:.35rem .75rem;border-radius:8px;transition:all .15s;white-space:nowrap}
+    .nb-link:hover{background:rgba(255,255,255,.15);color:#fff}
+    @media(max-width:480px){.nb-links{display:none}}
+
     /* ── TABS ── */
-    .tabs{background:var(--surf);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:900;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+    .tabs{background:var(--surf);border-bottom:1px solid var(--bdr);position:sticky;top:52px;z-index:900;box-shadow:0 2px 8px rgba(0,0,0,.07)}
     .tabs-inner{display:flex;overflow-x:auto;scrollbar-width:none;padding:0 1rem;max-width:1160px;margin:0 auto}
     .tabs-inner::-webkit-scrollbar{display:none}
     .tab{flex-shrink:0;padding:.7rem 1rem;border:none;background:none;cursor:pointer;font-size:13px;color:var(--muted);border-bottom:2.5px solid transparent;transition:all .15s;font-family:inherit;white-space:nowrap}
@@ -189,10 +199,40 @@
     .rt-str{background:#e0f7fa;color:#00695c}
     .rprice{font-size:10px;color:var(--muted);margin-top:2px}
 
-    footer{text-align:center;padding:1.1rem;font-size:12px;color:var(--muted);border-top:1px solid var(--bdr);background:var(--surf)}
+    /* ── SITE FOOTER ── */
+    .site-footer{background:var(--green);color:rgba(255,255,255,.85);margin-top:0}
+    .ft-wrap{max-width:1160px;margin:0 auto;padding:2rem 1.25rem 0}
+    .ft-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:2rem;padding-bottom:1.75rem;border-bottom:1px solid rgba(255,255,255,.15)}
+    @media(max-width:680px){.ft-grid{grid-template-columns:1fr 1fr}
+      .ft-col:first-child{grid-column:1/-1}}
+    @media(max-width:400px){.ft-grid{grid-template-columns:1fr}}
+    .ft-brand{font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:.4rem}
+    .ft-sub{font-size:12px;opacity:.7;line-height:1.7}
+    .ft-col-title{font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:rgba(255,255,255,.5);font-weight:700;margin-bottom:.6rem}
+    .ft-lnk{display:block;color:rgba(255,255,255,.75);text-decoration:none;font-size:13px;line-height:2;transition:color .15s}
+    .ft-lnk:hover{color:#fff}
+    .ft-stat-row{display:flex;justify-content:space-between;font-size:12px;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.08)}
+    .ft-stat-row:last-child{border-bottom:none}
+    .ft-stat-row span:last-child{font-weight:600;color:#fff}
+    .ft-bottom{text-align:center;padding:.9rem;font-size:11px;color:rgba(255,255,255,.4)}
   </style>
 </head>
-<body>
+<body id="top">
+
+<div class="navbar">
+  <div class="nb-inner">
+    <a class="nb-brand" href="#top">
+      <span class="nbi">🚴</span>
+      <span>Balaton Körbetekerés 2026</span>
+    </a>
+    <nav class="nb-links">
+      <a class="nb-link" href="#acc-section">Szállások</a>
+      <a class="nb-link" href="#rest-section">Éttermek</a>
+      <a class="nb-link" href="#crew-section">Csapat</a>
+      <a class="nb-link" href="#weather-section">Időjárás</a>
+    </nav>
+  </div>
+</div>
 
 <header>
   <div class="badge">🚴 Kerékpártúra · Balaton</div>
@@ -238,6 +278,7 @@
   </div>
 
   <!-- ACCOMMODATION STRIP -->
+  <div id="acc-section" style="position:relative;top:-60px;pointer-events:none"></div>
   <div class="acc-strip">
 
     <div class="apin">
@@ -514,6 +555,7 @@
 
   </div><!-- /day content -->
 
+  <div id="rest-section" style="position:relative;top:-60px;pointer-events:none"></div>
   <!-- RESTAURANT GRID -->
   <div class="rest-grid">
 
@@ -714,6 +756,7 @@
 
   </div><!-- /rest-grid -->
 
+  <div id="crew-section" style="position:relative;top:-60px;pointer-events:none"></div>
   <!-- CREW SECTION -->
   <div class="section-title"><i class="ti ti-users"></i>A csapat · 6 fő</div>
   <div class="crew-grid">
@@ -743,6 +786,7 @@
     </div>
   </div>
 
+  <div id="weather-section" style="position:relative;top:-60px;pointer-events:none"></div>
   <!-- WEATHER SECTION -->
   <div class="section-title"><i class="ti ti-cloud-sun"></i>Várható időjárás · Júl. 15–19. · Balatoni átlagok</div>
   <div class="card" style="margin-bottom:3rem;overflow:hidden">
@@ -764,8 +808,34 @@
 
 </div><!-- /wrap -->
 
-<footer>
-  Balaton Körbetekerés 2026 · Siófok → Siófok · ~230 km · 5 nap · 6 fő · Szállás összesen: 348 685 Ft · Fejenként: 58 114 Ft
+<footer class="site-footer">
+  <div class="ft-wrap">
+    <div class="ft-grid">
+      <div class="ft-col">
+        <div class="ft-brand">🚴 Balaton Körbetekerés 2026</div>
+        <div class="ft-sub">Siófok → Balatonkeresztúr → Badacsonytomaj</div>
+        <div class="ft-sub">→ Balatonfűzfő → Siófok · kb. 230 km</div>
+        <div class="ft-sub" style="margin-top:.5rem">2026. július 15–19. · 5 nap · 6 fő</div>
+      </div>
+      <div class="ft-col">
+        <div class="ft-col-title">Navigáció</div>
+        <a class="ft-lnk" href="#top">↑ Vissza a tetejére</a>
+        <a class="ft-lnk" href="#acc-section">Szállások</a>
+        <a class="ft-lnk" href="#rest-section">Étterem- &amp; bárjavaslatok</a>
+        <a class="ft-lnk" href="#crew-section">A csapat</a>
+        <a class="ft-lnk" href="#weather-section">Időjárás</a>
+      </div>
+      <div class="ft-col">
+        <div class="ft-col-title">Összesítő</div>
+        <div class="ft-stat-row"><span>Össz. táv</span><span>~230 km</span></div>
+        <div class="ft-stat-row"><span>Szállás össz.</span><span>348 685 Ft</span></div>
+        <div class="ft-stat-row"><span>1 főre (÷6)</span><span>58 114 Ft</span></div>
+        <div class="ft-stat-row"><span>Kerékpáros napok</span><span>4 nap</span></div>
+        <div class="ft-stat-row"><span>Pihenőnap</span><span>júl. 17. · Badacsony</span></div>
+      </div>
+    </div>
+    <div class="ft-bottom">Balaton Körbetekerés 2026 · Dávid, Béla, Szabi, Marci, Oli, Dominik</div>
+  </div>
 </footer>
 
 <script>
