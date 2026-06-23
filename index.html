@@ -25,6 +25,12 @@
     header .sub{font-size:.9rem;opacity:.8;margin-bottom:1.1rem}
     .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.15);border-radius:var(--r);overflow:hidden;max-width:640px;margin:0 auto}
     @media(max-width:480px){.stat-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:580px){
+      #ov table th:nth-child(2),#ov table td:nth-child(2){display:none}
+      .kfill{display:none}
+      td{padding:.5rem .55rem;font-size:12px}
+      th{padding:.4rem .55rem}
+    }
     .stat-cell{background:rgba(0,0,0,.12);padding:.7rem .5rem;text-align:center}
     .stat-cell .n{font-size:1.2rem;font-weight:700;line-height:1.1}
     .stat-cell .l{font-size:10px;opacity:.7;text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
@@ -740,8 +746,13 @@
   <!-- WEATHER SECTION -->
   <div class="section-title"><i class="ti ti-cloud-sun"></i>Várható időjárás · Júl. 15–19. · Balatoni átlagok</div>
   <div class="card" style="margin-bottom:3rem;overflow:hidden">
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;padding:.65rem 1rem .5rem;border-bottom:1px solid var(--bdr)">
+      <span style="font-size:11px;color:#757575;display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:#ff7043;display:inline-block;flex-shrink:0"></span>Max hőm.</span>
+      <span style="font-size:11px;color:#757575;display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:#29b6f6;display:inline-block;flex-shrink:0"></span>Min hőm.</span>
+      <span style="font-size:11px;color:#757575;display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:3px;background:#42a5f5;display:inline-block;flex-shrink:0"></span>Csapadékvalószínűség</span>
+    </div>
     <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
-      <svg id="weather-svg" viewBox="0 0 600 245" style="display:block;min-width:480px;width:100%"></svg>
+      <svg id="weather-svg" viewBox="0 0 600 232" style="display:block;min-width:420px;width:100%"></svg>
     </div>
     <div style="display:flex;gap:.5rem;padding:.7rem 1rem 1rem;flex-wrap:wrap;border-top:1px solid var(--bdr);background:var(--bg)">
       <span style="font-size:11px;color:var(--muted);align-self:center">Júliusi átlagok · élő előrejelzés:</span>
@@ -839,8 +850,8 @@ function drawWeatherChart() {
     { label:'Júl. 19', sub:'Vasárnap',  icon:'☀️', loc:'5. nap', tmax:32, tmin:20, rain:10, water:25 },
   ];
 
-  const W=600, H=245;
-  const PL=44, PR=14, PT=54, PB=78;
+  const W=600, H=232;
+  const PL=44, PR=14, PT=40, PB=76;
   const CW=W-PL-PR, CH=H-PT-PB;
   const TMIN=12, TMAX=36, TSPAN=TMAX-TMIN;
   const n=days.length, colW=CW/n;
@@ -892,7 +903,7 @@ function drawWeatherChart() {
     const x = cx(i), ymx = cy(d.tmax), ymn = cy(d.tmin);
 
     /* weather icon */
-    h += `<text x="${x.toFixed(1)}" y="${(PT-20).toFixed(1)}" text-anchor="middle" font-size="24" font-family="system-ui">${d.icon}</text>`;
+    h += `<text x="${x.toFixed(1)}" y="${(PT-12).toFixed(1)}" text-anchor="middle" font-size="22" font-family="system-ui">${d.icon}</text>`;
 
     /* max dot + label */
     h += `<circle cx="${x.toFixed(1)}" cy="${ymx.toFixed(1)}" r="5" fill="#ff7043" stroke="white" stroke-width="2"/>`;
@@ -914,12 +925,6 @@ function drawWeatherChart() {
     h += `<rect x="${bx.toFixed(1)}" y="${(by+bh_max-bh).toFixed(1)}" width="${bw}" height="${bh.toFixed(1)}" rx="4" fill="#42a5f5" opacity=".8"/>`;
     h += `<text x="${x.toFixed(1)}" y="${by+bh_max+12}" text-anchor="middle" font-size="10" fill="#1565c0" font-weight="600" font-family="system-ui">${d.rain}%</text>`;
   });
-
-  /* legend */
-  const ly = 18;
-  h += `<circle cx="52" cy="${ly}" r="5" fill="#ff7043"/><text x="61" y="${ly+4}" font-size="10" fill="#757575" font-family="system-ui">Max hőm.</text>`;
-  h += `<circle cx="130" cy="${ly}" r="5" fill="#29b6f6"/><text x="139" y="${ly+4}" font-size="10" fill="#757575" font-family="system-ui">Min hőm.</text>`;
-  h += `<rect x="208" y="${ly-6}" width="10" height="10" rx="2" fill="#42a5f5" opacity=".8"/><text x="222" y="${ly+4}" font-size="10" fill="#757575" font-family="system-ui">Csapadékvalószínűség</text>`;
 
   svg.innerHTML = h;
 }
